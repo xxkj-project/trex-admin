@@ -1,0 +1,137 @@
+<!--
+ * @Author: wangshengxian
+ * @Date: 2020-09-28 11:45:53
+ * @LastEditors: wangshengxian
+ * @LastEditTime: 2021-01-16 17:09:32
+ * @Desc: 查看证件照
+-->
+<template>
+  <div class="dialog">
+    <el-dialog
+      :title="title"
+      :width="width"
+      :center="true"
+      top="0"
+      :fullscreen="true"
+      :visible.sync="dialogVisible"
+      :before-close="handleBeforeClose"
+      @opened="handleOpened"
+      @closed="handleClosed"
+    >
+      <div class="dialogMain">
+        <div class="imgBox">
+          <div class="imgItem" v-for="(imgUrl, index) in imgList" :key="index">
+            <el-image
+              class="img"
+              :src="imgUrl"
+              lazy
+              :preview-src-list="previewList"
+              alt=""
+              @click="onPreview(imgUrl, index)"
+            />
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+export default {
+  name: '',
+  data() {
+    return {
+      previewList: []
+    }
+  },
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    imgList: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+    title: {
+      type: String,
+      default: '提示'
+    },
+    width: {
+      type: String,
+      default: '350px'
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.$emit('update:visible', val)
+      }
+    }
+  },
+  created() {},
+  mounted() {},
+  methods: {
+    onPreview(url, index) {
+      console.log('-预览-', url, index)
+      this.previewList = [url]
+    },
+    handleBeforeClose(done) {
+      // console.log('dialog关闭前的回调')
+      done()
+    },
+    handleOpened() {
+      // console.log('dialog打开动画结束时的回调')
+    },
+    handleClosed() {
+      // console.log('dialog关闭动画结束时的回调')
+    }
+  },
+  components: {}
+}
+</script>
+<style lang="less" scoped>
+//@import url(); 引入公共css类
+/deep/ .el-dialog--center {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  height: 600px;
+
+  .el-dialog__body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.dialogMain {
+  width: 100%;
+}
+
+.imgBox {
+  display: flex;
+
+  .imgItem {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .img {
+      width: 200px;
+    }
+  }
+}
+</style>
